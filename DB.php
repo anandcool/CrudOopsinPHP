@@ -59,6 +59,68 @@ class query extends database{
     }
         
     }
+
+    public function insertData($table,$condition){
+
+        if($condition!=''){
+            
+            foreach($condition as $key=>$val){
+                $fieldArr[] = $key;
+                $valueArr[] = $val;
+            }
+            $field = implode(',',$fieldArr);
+            $value = implode("','",$valueArr);
+            $value = "'".$value."'";
+            // echo "'".$value."'";
+            // die();
+            $sql = "insert into $table($field) values($value)";
+            $result = $this->connect()->query($sql);
+            return $result;
+        }
+    }
+    public function DeleteData($table,$condition){
+
+        if($condition!=''){
+            $sql = "delete from $table where ";            
+            $c = count($condition);
+            $i = 1;
+            foreach($condition as $key=>$val){
+                if($i == $c){
+                    $sql.="$key='$val'";
+                }else{
+                    $sql.="$key='$val' and ";
+                }
+                $i++;
+            }
+            // print_r($sql);
+            // die();
+
+            $result = $this->connect()->query($sql);
+            return $result;
+        }
+    }
+
+    public function UpdateData($table,$condition,$where_field,$where_value){
+
+        if($condition!=''){
+            $sql = "update $table set ";            
+            $c = count($condition);
+            $i = 1;
+            foreach($condition as $key=>$val){
+                if($i == $c){
+                    $sql.="$key='$val'";
+                }else{
+                    $sql.="$key='$val' and ";
+                }
+                $i++;
+            }
+            // print_r($sql);
+            // die();
+            $sql.=" where $where_field='$where_value'";
+            $result = $this->connect()->query($sql);
+            return $result;
+        }
+    }
 }
 
 //select $field from $table where id='1' and name = 'anand' order by name ASC limit 1
