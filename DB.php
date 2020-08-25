@@ -9,7 +9,7 @@ class database{
         $this->host = 'localhost';
         $this->dbusername = 'root';
         $this->dbpassword = '';
-        $this->dbname = 'crud';
+        $this->dbname = 'oopscrud';
 
         //create a connection
         $con = new mysqli($this->host,$this->dbusername,$this->dbpassword,$this->dbname);
@@ -17,4 +17,51 @@ class database{
     }
 }
 
+class query extends database{
+    public function getData($table,$field='*',$condition=[],$like='',$order_by_field='',$order_by_type='ASC',$limit=''){
+        $sql = "select $field from $table";
+
+        // print_r($condition);
+        if($condition != ''){
+            $sql.=" where ";
+            $c = count($condition);
+            $i = 1;
+            foreach($condition as $key=>$val){
+                if($i == $c){
+                    $sql.="$key='$val'";
+                }else{
+                    $sql.="$key='$val' and ";
+                }
+                $i++;
+            }
+            }
+
+        if($order_by_field != ''){
+            $sql.=" order by $order_by_field $order_by_type ";
+            }
+
+        if($limit != ''){
+        $sql.=" limit $limit ";
+        }
+        die($sql);
+        $result = $this->connect()->query($sql);
+        // print_r($result);
+        // print_r($result->num_rows);
+        if($result->num_rows){
+        $arr = array(); //make an array
+        while($row = $result->fetch_assoc()){
+            // print_r($row);
+            $arr[] = $row;//push in the array
+        }
+        return $arr;
+    }else{
+        return 0;
+    }
+        
+    }
+}
+
+//select $field from $table where id='1' and name = 'anand' order by name ASC limit 1
+//select $field from $table where $condition orderby $order_by_field $order_by_type limit $order_by_limit
+// $field -> * or name ,email
 ?>
