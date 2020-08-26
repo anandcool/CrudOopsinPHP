@@ -18,7 +18,7 @@ class database{
 }
 
 class query extends database{
-    public function getData($table,$field='*',$condition=[],$like='',$order_by_field='',$order_by_type='ASC',$limit=''){
+    public function getData($table,$field='*',$condition='',$like='',$order_by_field='',$order_by_type='ASC',$limit=''){
         $sql = "select $field from $table";
 
         // print_r($condition);
@@ -43,7 +43,7 @@ class query extends database{
         if($limit != ''){
         $sql.=" limit $limit ";
         }
-        die($sql);
+        // die($sql);
         $result = $this->connect()->query($sql);
         // print_r($result);
         // print_r($result->num_rows);
